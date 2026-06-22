@@ -10,25 +10,24 @@ from telegram.error import Conflict, NetworkError
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 logger = logging.getLogger(__name__)
 
-TOKEN_BOT = "8561070385:AAEJhLXMdeAK1Fol32YH9mMIRApuhyqeqYM"  # ← ganti ini
+TOKEN_BOT = "8561070385:AAEJhLXMdeAK1Fol32YH9mMIRApuhyqeqYM"  # ← Replace with your token
 
-# 🔑 DAFTAR SEMUA SANDI & KODE AKSES
+# 🔑 ALL ACCESS KEYS AND CODES
 KUNCI_DAFTAR = {
     "key1": "b5669fca-da1c-4e72-889b-0724d20f0290",
-    "key2": "7c2a9d4b-8e1f-4c3d-a5b6-f1e2d3c4b5a6",  # ← ganti password key2
+    "key2": "7c2a9d4b-8e1f-4c3d-a5b6-f1e2d3c4b5a6",  # ← Replace with your key2
     "key3": "a1b2c3d4-e5f6-4g7h-8i9j-k0l1m2n3o4p5"
 }
 
-# ✅ Kode akses ketikan manual
+# ✅ Manual access codes
 KODE_AKSES_MANUAL = {
     "Unlock 144 FPS V2.0 - AXM": "key1",
     "Unlock 144 FPS V3.0 - AXM": "key3"
 }
 
-CHANNEL_NAME = "@aimxmodpubg"
 OWNER = "@RixXze"
 
-# --- WEB SERVER AGAR TIDAK MATI ---
+# --- WEB SERVER TO KEEP BOT ALIVE ---
 class PingHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         self.send_response(200)
@@ -48,7 +47,7 @@ threading.Thread(target=jalankan_server, daemon=True).start()
 
 async def error_handler(update: object, context: ContextTypes.DEFAULT_TYPE) -> None:
     if isinstance(context.error, Conflict):
-        logger.warning("Conflict — instance lain berjalan.")
+        logger.warning("Conflict — another instance is running.")
     elif isinstance(context.error, NetworkError):
         logger.warning(f"Network error: {context.error}")
     else:
@@ -59,21 +58,23 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         kode_link = context.args[0].lower().strip()
         if kode_link in KUNCI_DAFTAR:
             await update.message.reply_text(
-                "✅ 𝗟𝗜𝗡𝗞 𝗔𝗖𝗖𝗘𝗦𝗦 𝗚𝗥𝗔𝗡𝗧𝗘𝗗 🎉\n\n"
-                "🔐 𝗬𝗼𝘂𝗿 𝗨𝗻𝗹𝗼𝗰𝗸 𝗞𝗲𝘆:\n"
-                f"`{KUNCI_DAFTAR[kode_link]}`\n\n"
-                "⚠️ 𝗞𝗲𝗲𝗽 𝗽𝗿𝗶𝘃𝗮𝘁𝗲\n"
-                "📂 𝗢𝗽𝗲𝗻 𝗭𝗜𝗣 → 𝗣𝗮𝘀𝘁𝗲 → 𝗗𝗼𝗻𝗲!",
-                parse_mode="Markdown"
+                "<b>✅ ACCESS GRANTED</b>\n\n"
+                "🔐 <b>Your Unlock Code:</b>\n"
+                f"<code>{KUNCI_DAFTAR[kode_link]}</code>\n\n"
+                "⚠️ <i>Keep your code secure</i>\n"
+                "📂 Extract ZIP → Paste Code → Done",
+                parse_mode="HTML"
             )
             return
 
     await update.message.reply_text(
-        "👋 𝗪𝗲𝗹𝗰𝗼𝗺𝗲 𝘁𝗼 𝗔𝗶𝗺 𝗫 𝗠𝗼𝗱 𝗞𝗲𝘆 𝗕𝗼𝘁\n\n"
-        "🔑 Send valid 𝗔𝗖𝗖𝗘𝗦𝗦 𝗖𝗢𝗗𝗘 𝘁𝗼 𝗴𝗲𝘁 𝘆𝗼𝘂𝗿 𝗸𝗲𝘆:\n"
-        "👉 Example: example123\n\n"
-        f"📢 {CHANNEL_NAME}\n"
-        f"👤 {OWNER}"
+        "<b>👋 WELCOME TO AXM KEY BOT</b>\n\n"
+        "<b>📌 How to Use:</b>\n"
+        "Send your <b>access code</b> to get your unlock key\n\n"
+        "<b>💡 Example Code:</b>\n"
+        "<code>Unlock 144 FPS V2.0 - AXM</code>\n\n"
+        f"👤 <b>Developer:</b> {OWNER}",
+        parse_mode="HTML"
     )
 
 async def handle_msg(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -82,18 +83,20 @@ async def handle_msg(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None
     if txt in KODE_AKSES_MANUAL:
         nama_kunci = KODE_AKSES_MANUAL[txt]
         await update.message.reply_text(
-            "✅ 𝗔𝗖𝗖𝗘𝗦𝗦 𝗚𝗥𝗔𝗡𝗧𝗘𝗗 🎉\n\n"
-            "🔐 𝗬𝗼𝘂𝗿 𝗨𝗻𝗹𝗼𝗰𝗸 𝗞𝗲𝘆:\n"
-            f"`{KUNCI_DAFTAR[nama_kunci]}`\n\n"
-            "⚠️ 𝗞𝗲𝗲𝗽 𝗽𝗿𝗶𝘃𝗮𝘁𝗲\n"
-            "📂 𝗢𝗽𝗲𝗻 𝗭𝗜𝗣 → 𝗣𝗮𝘀𝘁𝗲 → 𝗗𝗼𝗻𝗲!",
-            parse_mode="Markdown"
+            "<b>✅ ACCESS GRANTED</b>\n\n"
+            "🔐 <b>Your Unlock Code:</b>\n"
+            f"<code>{KUNCI_DAFTAR[nama_kunci]}</code>\n\n"
+            "⚠️ <i>Keep your code secure</i>\n"
+            "📂 Extract ZIP → Paste Code → Done",
+            parse_mode="HTML"
         )
     else:
         await update.message.reply_text(
-            "❌ 𝗜𝗡𝗩𝗔𝗟𝗜𝗗 𝗖𝗢𝗗𝗘 🚫\n\n"
-            "Send only the 𝗰𝗼𝗿𝗿𝗲𝗰𝘁 𝗔𝗰𝗰𝗲𝘀𝘀 𝗖𝗼𝗱𝗲.\n\n"
-            f"📢 {CHANNEL_NAME}"
+            "<b>❌ INVALID CODE</b>\n\n"
+            "The code you sent was not found.\n"
+            "Please check and try again.\n\n"
+            f"👤 <b>Contact:</b> {OWNER}",
+            parse_mode="HTML"
         )
 
 def main():
@@ -101,7 +104,7 @@ def main():
     app.add_error_handler(error_handler)
     app.add_handler(CommandHandler("start", start))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_msg))
-    logger.info("Bot mulai berjalan...")
+    logger.info("Bot is now running...")
     app.run_polling(drop_pending_updates=True)
 
 if __name__ == "__main__":
