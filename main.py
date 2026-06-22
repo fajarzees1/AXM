@@ -15,12 +15,14 @@ TOKEN_BOT = "8561070385:AAEJhLXMdeAK1Fol32YH9mMIRApuhyqeqYM"  # ← ganti ini
 # 🔑 DAFTAR SEMUA SANDI & KODE AKSES
 KUNCI_DAFTAR = {
     "key1": "b5669fca-da1c-4e72-889b-0724d20f0290",
-    "key2": "7c2a9d4b-8e1f-4c3d-a5b6-f1e2d3c4b5a6"  # ← ganti password key2
+    "key2": "7c2a9d4b-8e1f-4c3d-a5b6-f1e2d3c4b5a6",  # ← ganti password key2
+    "key3": "a1b2c3d4-e5f6-4g7h-8i9j-k0l1m2n3o4p5"
 }
 
 # ✅ Kode akses ketikan manual
 KODE_AKSES_MANUAL = {
-    "Unlock 144 FPS V2.0 - AXM": "key1"
+    "Unlock 144 FPS V2.0 - AXM": "key1",
+    "Unlock 144 FPS V3.0 - AXM": "key3"
 }
 
 CHANNEL_NAME = "@aimxmodpubg"
