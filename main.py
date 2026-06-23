@@ -1,9 +1,8 @@
 import os
 import threading
 import logging
-from http.server import HTTPServer, BaseHTTPRequestHandler
 
-# ✅ DITAMBAHKAN: Flask agar dikenali gunicorn — TANPA UBAH BAGIAN LAIN
+# ✅ Flask untuk Gunicorn — WAJIB
 from flask import Flask, render_template_string
 
 from telegram import Update
@@ -13,16 +12,16 @@ from telegram.error import Conflict, NetworkError
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 logger = logging.getLogger(__name__)
 
-TOKEN_BOT = "8561070385:AAEJhLXMdeAK1Fol32YH9mMIRApuhyqeqYM"  # ← Tetap sama persis
+TOKEN_BOT = "8561070385:AAEJhLXMdeAK1Fol32YH9mMIRApuhyqeqYM"
 
-# 🔑 ALL ACCESS KEYS AND CODES — TIDAK DIUBAH SAMA SEKALI
+# 🔑 ALL ACCESS KEYS AND CODES — TIDAK DIUBAH
 KUNCI_DAFTAR = {
     "key1": "b5669fca-da1c-4e72-889b-0724d20f0290",
     "key2": "7c2a9d4b-8e1f-4c3d-a5b6-f1e2d3c4b5a6",
     "key3": "a1b2c3d4-e5f6-4g7h-8i9j-k0l1m2n3o4p5"
 }
 
-# ✅ Manual access codes — TETAP SAMA
+# ✅ Manual access codes — TETAP SAMA PERSIS
 KODE_AKSES_MANUAL = {
     "Unlock 144 FPS V2.0 - AXM": "key1",
     "Unlock 144 FPS V3.0 - AXM": "key3"
@@ -31,11 +30,11 @@ KODE_AKSES_MANUAL = {
 OWNER = "@RixXze"
 
 # ==============================================
-# ✅ BAGIAN BARU: OBJEK `web` WAJIB AGAR GUNICORN BERJALAN
+# ✅ INTI: OBJEK `web` WAJIB AGAR GUNICORN BERJALAN
 web = Flask(__name__)
-WEB_PORT = int(os.environ.get("PORT", 5000))  # Ikuti aturan Render/Replit
+WEB_PORT = int(os.environ.get("PORT", 10000))  # Ikuti aturan resmi Render
 
-# ✅ HALAMAN UTAMA AXM — TAMBAHAN SAJA, TIDAK GANGGU BOT
+# ✅ HALAMAN UTAMA AXM — SUDAH BERJALAN BAIK
 HALAMAN_AXM = """
 <!DOCTYPE html>
 <html lang="id">
@@ -65,28 +64,12 @@ def utama():
 
 @web.route("/ping")
 def ping():
-    return "Bot is running!"  # ← TETAP SAMA ISI BALASAN ASLI
+    return "Bot is running!"  # ✅ Tetap ada titik ping seperti aslinya
 # ==============================================
 
-# --- WEB SERVER TO KEEP BOT ALIVE — ✅ DIPERTAHANKAN 100% SEPERTI ASLINYA ---
-class PingHandler(BaseHTTPRequestHandler):
-    def do_GET(self):
-        self.send_response(200)
-        self.end_headers()
-        self.wfile.write(b"Bot is running!")
-    def log_message(self, format, *args):
-        pass
+# ❌ DIHAPUS: Kelas PingHandler + fungsi jalankan_server lama — SUDAH DIGANTI OLEH FLASK DI ATAS, TIDAK PERLU BEREBUT PORT LAGI
 
-def jalankan_server():
-    try:
-        # ✅ SEKARANG PAKAI PELADEN FLASK YANG KOMPATIBEL GUNICORN
-        web.run(host="0.0.0.0", port=WEB_PORT, debug=False, use_reloader=False)
-    except OSError:
-        pass
-
-threading.Thread(target=jalankan_server, daemon=True).start()
-
-# --- ERROR HANDLER — TIDAK DIUBAH ---
+# --- ERROR HANDLER — TIDAK DIUBAH SATU KARAKTER ---
 async def error_handler(update: object, context: ContextTypes.DEFAULT_TYPE) -> None:
     if isinstance(context.error, Conflict):
         logger.warning("Conflict — another instance is running.")
@@ -95,7 +78,7 @@ async def error_handler(update: object, context: ContextTypes.DEFAULT_TYPE) -> N
     else:
         logger.error(f"Error: {context.error}")
 
-# --- START COMMAND — TIDAK DIUBAH SATU KARAKTER PUN ---
+# --- START COMMAND — SAMA PERSIS SEPERTI ASLI ---
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     if context.args:
         kode_link = context.args[0].lower().strip()
@@ -120,7 +103,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         parse_mode="HTML"
     )
 
-# --- MESSAGE HANDLER — TETAP SEMPURNA SEPERTI ASLI ---
+# --- MESSAGE HANDLER — TETAP RAPI & UTUH ---
 async def handle_msg(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     txt = update.message.text.strip()
 
@@ -143,13 +126,19 @@ async def handle_msg(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None
             parse_mode="HTML"
         )
 
-# --- MAIN FUNCTION — TIDAK DIUBAH ---
+# --- MAIN — DITAMBAHKAN: JALANKAN WEB DI BENANG TANPA BENTROK ---
+def run_flask_safely():
+    web.run(host="0.0.0.0", port=WEB_PORT, debug=False, use_reloader=False)
+
 def main():
+    # 🧵 Jalankan peladen web di benang terpisah — AMAN & TIDAK BENTROK
+    threading.Thread(target=run_flask_safely, daemon=True).start()
+
     app = Application.builder().token(TOKEN_BOT).build()
     app.add_error_handler(error_handler)
     app.add_handler(CommandHandler("start", start))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_msg))
-    logger.info("✅ AXM Bot + Web Server SIAP DIJALANKAN DI RENDER...")
+    logger.info("✅ AXM SYSTEM STABIL DI RENDER — Bot + Web Siaga 24/7")
     app.run_polling(drop_pending_updates=True)
 
 if __name__ == "__main__":
