@@ -32,7 +32,7 @@ OWNER = "@RixXze"
 # ==============================================
 # ✅ INTI: OBJEK `web` WAJIB AGAR GUNICORN BERJALAN
 web = Flask(__name__)
-WEB_PORT = int(os.environ.get("PORT", 10000))  # Ikuti aturan resmi Render
+WEB_PORT = int(os.environ.get("PORT", 8080))  # Ikuti aturan resmi Render
 
 # ✅ HALAMAN UTAMA AXM — SUDAH BERJALAN BAIK
 HALAMAN_AXM = """
