@@ -1,6 +1,7 @@
 import os
 import threading
 import logging
+import asyncio
 
 # ✅ Flask untuk Gunicorn — WAJIB
 from flask import Flask, render_template_string
@@ -12,7 +13,8 @@ from telegram.error import Conflict, NetworkError
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 logger = logging.getLogger(__name__)
 
-TOKEN_BOT = "8561070385:AAEJhLXMdeAK1Fol32YH9mMIRApuhyqeqYM"
+# NOTE: It's better to move TOKEN and sensitive keys to environment variables in Render dashboard.
+TOKEN_BOT = os.environ.get("TOKEN_BOT", "8561070385:AAEJhLXMdeAK1Fol32YH9mMIRApuhyqeqYM")
 
 # 🔑 ALL ACCESS KEYS AND CODES — TIDAK DIUBAH
 KUNCI_DAFTAR = {
@@ -27,7 +29,7 @@ KODE_AKSES_MANUAL = {
     "Unlock 144 FPS V3.0 - AXM": "key3"
 }
 
-OWNER = "@RixXze"
+OWNER = os.environ.get("OWNER", "@RixXze")
 
 # ==============================================
 # ✅ INTI: OBJEK `web` WAJIB AGAR GUNICORN BERJALAN
@@ -66,8 +68,6 @@ def utama():
 def ping():
     return "Bot is running!"  # ✅ Tetap ada titik ping seperti aslinya
 # ==============================================
-
-# ❌ DIHAPUS: Kelas PingHandler + fungsi jalankan_server lama — SUDAH DIGANTI OLEH FLASK DI ATAS, TIDAK PERLU BEREBUT PORT LAGI
 
 # --- ERROR HANDLER — TIDAK DIUBAH SATU KARAKTER ---
 async def error_handler(update: object, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -133,6 +133,14 @@ def run_flask_safely():
 def main():
     # 🧵 Jalankan peladen web di benang terpisah — AMAN & TIDAK BENTROK
     threading.Thread(target=run_flask_safely, daemon=True).start()
+
+    # Pastikan ada asyncio event loop di thread ini (Python 3.14+ memperketat perilaku loop)
+    try:
+        # get_running_loop akan melempar RuntimeError jika tidak ada loop
+        asyncio.get_running_loop()
+    except RuntimeError:
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
 
     app = Application.builder().token(TOKEN_BOT).build()
     app.add_error_handler(error_handler)
