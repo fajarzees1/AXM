@@ -1,0 +1,9 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "rixxze.coderankmlbb.id",  ← nama paket aplikasimu
+    "sha256_cert_fingerprints": ["C9:B8:00:CB:8D:CF:7F:60:5C:00:D3:4F:11:7E:00:6C:54:D7:CC:D8:D1:D6:4F:C1:01:FE:88:08:8D:20:F5:F7"] ← sidik jari sertifikatmu
+  }
+}]
+
