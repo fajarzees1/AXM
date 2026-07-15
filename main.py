@@ -21,7 +21,9 @@ KUNCI_DAFTAR = {
     "key1": "b5669fca-da1c-4e72-889b-0724d20f0290",
     "key2": "7c2a9d4b-8e1f-4c3d-a5b6-f1e2d3c4b5a6",
     "key3": "a1b2c3d4-e5f6-4g7h-8i9j-k0l1m2n3o4p5",
-    "key4": "b3c9f2a1-6d4e-4f8b-9a2c-3e1f7b6c5d8a"
+    "key4": "b3c9f2a1-6d4e-4f8b-9a2c-3e1f7b6c5d8a",
+    "key5": "d4a7e2f1-9c3b-4f6a-8e1d-5b2c7a9f6e3d",
+    "key6": "c8f3a1d9-7e2b-4a6f-9c1e-3d5f8b2a7e4c"
 }
 
 # ✅ Manual access codes — TETAP SAMA PERSIS
